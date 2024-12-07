@@ -1,15 +1,30 @@
 {
-  "name": "weather-cli",
-  "version": "1.0.0",
-  "description": "CLI for getting weather",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "cli",
-    "weather"
-  ],
-  "author": "Alex Space",
-  "license": "ISC"
+	"name": "weather-cli",
+	"version": "1.0.0",
+	"description": "CLI for getting weather",
+	"main": "weather.js",
+	"bin": {
+		"weather": "weather.js"
+	},
+	"type": "module",
+	"scripts": {
+		"start": "node weather.js",
+		"lint": "eslint .",
+		"format": "prettier --check --ignore-path .gitignore .",
+		"format:fix": "prettier --write --ignore-path .gitignore ."
+	},
+	"keywords": [
+		"cli",
+		"weather"
+	],
+	"author": "Alex Space",
+	"license": "ISC",
+	"dependencies": {
+		"axios": "^1.7.9"
+	},
+	"devDependencies": {
+		"eslint": "^9.16.0",
+		"prettier": "^3.4.2",
+		"prettier-plugin-sort-imports": "^1.8.6"
+	}
 }
