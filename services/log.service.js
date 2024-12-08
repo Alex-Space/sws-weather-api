@@ -22,4 +22,16 @@ const printHelp = msg => {
 		`
 	);
 };
-export { printError, printHelp, printSuccess };
+
+const printWeather = (msg, icon) => {
+	console.log(dedent`${chalk.bgCyan(' WEATHER ')}
+	Погода в городе ${msg.name} 
+	${icon} (${msg.weather[0].description})
+	🌡️ Температура: ${msg.main.temp}°C
+	🌬️ Ощущается как: ${msg.main.feels_like}°C
+	💧 Влажность: ${msg.main.humidity}%
+	💨 Ветер: ${msg.wind.speed} м/с, ${msg.wind.deg}°
+	`);
+};
+
+export { printError, printHelp, printSuccess, printWeather };
