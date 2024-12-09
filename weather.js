@@ -11,7 +11,7 @@ const saveToken = async token => {
 	}
 	try {
 		await saveKeyValue(TOKEN_DICTIONARY.token, token);
-		printSuccess('Token saved successfully');
+		printSuccess('Токен сохранен');
 	} catch (err) {
 		printError(err.message);
 	}
@@ -24,7 +24,7 @@ const saveCity = async city => {
 	}
 	try {
 		await saveKeyValue(TOKEN_DICTIONARY.city, city);
-		printSuccess('City saved successfully');
+		printSuccess('Город добавлен');
 	} catch (err) {
 		printError(err.message);
 	}
@@ -39,7 +39,7 @@ const getForecast = async () => {
 		if (e?.response?.status === 404) {
 			printError('The city is set incorrectly');
 		} else if (e?.response?.status === 401) {
-			printError('The token is set incorrectly');
+			printError('Токен установлен неправильно');
 		} else {
 			printError(e.message);
 		}

@@ -13,12 +13,12 @@ const printHelp = msg => {
 	console.log(
 		dedent`
 		${chalk.bgCyan(' HELP ')}
-		Usage: weather [options]
-		Options:
-		Without parameters - weather output
-		-h           Output usage information
-		-s <CITY>    Search for weather information for a specific city
-		-t <API_KEY> Save token
+		Использование: weather [options]
+		Параметры:
+		Без параметров - вывод погоды на установленный город(пример weather -s moscow)
+		-h           Вывод информации
+		-s <CITY>    Поиск погоды по городу
+		-t <API_KEY> Сохранить токен
 		`
 	);
 };
