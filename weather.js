@@ -2,29 +2,30 @@
 import { getArgs } from './helpers/args.js';
 import { getIcon, getWeather } from './services/api.service.js';
 import { printError, printHelp, printSuccess, printWeather } from './services/log.service.js';
-import { getKeyValue, saveKeyValue, TOKEN_DICTIONARY } from './services/storage.service.js';
+import { FILE_DICTIONARY, saveKeyValue } from './services/storage.service.js';
 
 const saveToken = async token => {
 	if (!token.length) {
-		printError('No token provided');
+		printError('Токен не предоставлен');
 		return;
 	}
 	try {
-		await saveKeyValue(TOKEN_DICTIONARY.token, token);
+		await saveKeyValue(FILE_DICTIONARY.token, token);
 		printSuccess('Токен сохранен');
 	} catch (err) {
 		printError(err.message);
 	}
 };
 
-const saveCity = async city => {
-	if (!city.length) {
-		printError('No token provided');
+const saveCities = async cities => {
+	if (!cities || cities.length === 0) {
+		printError('Город(а) передан(ы) неверно');
 		return;
 	}
+
 	try {
-		await saveKeyValue(TOKEN_DICTIONARY.city, city);
-		printSuccess('Город добавлен');
+		await saveKeyValue(FILE_DICTIONARY.cities, cities);
+		printSuccess('Город(а) сохранен(ы)');
 	} catch (err) {
 		printError(err.message);
 	}
@@ -32,31 +33,36 @@ const saveCity = async city => {
 
 const getForecast = async () => {
 	try {
-		const city = process.env.CITY ?? (await getKeyValue(TOKEN_DICTIONARY.city));
-		const weather = await getWeather(city);
-		printWeather(weather, getIcon(weather.weather[0].icon));
+		const weather = await getWeather();
+		for (const city of weather) {
+			printWeather(city.data, getIcon(city.data.weather[0].icon));
+		}
 	} catch (e) {
 		if (e?.response?.status === 404) {
 			printError('The city is set incorrectly');
 		} else if (e?.response?.status === 401) {
 			printError('Токен установлен неправильно');
 		} else {
-			printError(e.message);
+			printError(' Не удалось сделать вывод. ', e.message);
 		}
 	}
 };
-const initCLI = () => {
-	const args = getArgs(process.argv);
 
-	if (args.h) {
+const initCLI = async () => {
+	const { token, cities, help } = getArgs(process.argv);
+
+	if (help) {
 		return printHelp();
 	}
-	if (args.s) {
-		return saveCity(args.s);
+
+	if (cities?.length > 0) {
+		await saveCities(cities);
 	}
-	if (args.t) {
-		return saveToken(args.t);
+
+	if (token) {
+		await saveToken(token);
 	}
+
 	return getForecast();
 };
 

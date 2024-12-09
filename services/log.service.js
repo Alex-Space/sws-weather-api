@@ -1,37 +1,38 @@
 import chalk from 'chalk';
 import dedent from 'dedent-js';
+import { drawBox } from '../helpers/drawBox.js';
 
-const printError = msg => {
-	console.log(chalk.bgRed(' Error: ') + ' ' + msg);
+const printError = (title = ' ', msg) => {
+	console.log(chalk.bgRed(' Ошибка: ') + title + msg);
 };
 
 const printSuccess = msg => {
-	console.log(chalk.bgGreen(' Success: ') + ' ' + msg);
+	console.log(chalk.bgGreen(' Успех: ') + ' ' + msg);
 };
 
 const printHelp = msg => {
 	console.log(
 		dedent`
-		${chalk.bgCyan(' HELP ')}
+		${chalk.bgCyan(' СПРАВКА ')}
 		Использование: weather [options]
 		Параметры:
-		Без параметров - вывод погоды на установленный город(пример weather -s moscow)
-		-h           Вывод информации
-		-s <CITY>    Поиск погоды по городу
-		-t <API_KEY> Сохранить токен
+		Без параметров - вывод погоды на установленные города
+		-h                          Вывод справочной информации
+		-s <city> [city2 city3 ...] Установить требуемые города
+		-t <token>                  Сохранить токен
 		`
 	);
 };
 
-const printWeather = (msg, icon) => {
-	console.log(dedent`${chalk.bgCyan(' WEATHER ')}
-	Погода в городе ${msg.name} 
-	${icon} (${msg.weather[0].description})
-	🌡️ Температура: ${msg.main.temp}°C
-	🌬️ Ощущается как: ${msg.main.feels_like}°C
-	💧 Влажность: ${msg.main.humidity}%
-	💨 Ветер: ${msg.wind.speed} м/с, ${msg.wind.deg}°
-	`);
+const printWeather = (city, icon) => {
+	console.log(dedent`
+		${drawBox(city.name)}
+		${icon} (${city.weather[0].description})
+		🌡️ Температура: ${city.main.temp}°C
+		🌬️ Ощущается как: ${city.main.feels_like}°C
+		💧 Влажность: ${city.main.humidity}%
+		💨 Ветер: ${city.wind.speed} м/с, ${city.wind.deg}°
+		`);
 };
 
 export { printError, printHelp, printSuccess, printWeather };

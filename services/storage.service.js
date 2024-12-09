@@ -4,19 +4,27 @@ import { join } from 'path';
 
 const filePath = join(homedir(), 'weather-data.json');
 
-const TOKEN_DICTIONARY = {
+const FILE_DICTIONARY = {
 	token: 'token',
-	city: 'city'
+	cities: 'cities'
 };
 
 const saveKeyValue = async (key, value) => {
 	let data = {};
+
 	if (await isExist(filePath)) {
-		const file = await promises.readFile(filePath);
-		data = JSON.parse(file);
+		const file = await promises.readFile(filePath, 'utf-8');
+		try {
+			data = JSON.parse(file);
+		} catch (error) {
+			console.error('Ошибка при парсинге JSON:', error.message);
+			data = {};
+		}
 	}
+
 	data[key] = value;
-	await promises.writeFile(filePath, JSON.stringify(data));
+
+	await promises.writeFile(filePath, JSON.stringify(data, null, 2), 'utf-8');
 };
 
 const getKeyValue = async key => {
@@ -38,6 +46,4 @@ const isExist = async path => {
 	}
 };
 
-
-
-export { getKeyValue, saveKeyValue, TOKEN_DICTIONARY };
+export { FILE_DICTIONARY, getKeyValue, saveKeyValue };

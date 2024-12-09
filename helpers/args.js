@@ -1,20 +1,26 @@
-const getArgs = args => {
-	const res = {};
-	const [executor, file, ...rest] = args;
+import { Command } from 'commander';
 
-	rest.forEach((value, index, array) => {
-		if (value.charAt(0) === '-') {
-			if (index === array.length - 1) {
-				res[value.substring(1)] = true;
-			} else if (array[index + 1].charAt(0) !== '-') {
-				res[value.substring(1)] = array[index + 1];
-			} else {
-				res[value.substring(1)] = true;
-			}
-		}
-	});
+const getArgs = () => {
+	const program = new Command();
 
-	return res;
+	program
+		.option('-t, --token <token>', 'токен для API')
+		.option('-h, --help', 'справочная информация')
+		.option('-s, --cities <cities...>', 'список городов');
+
+	program.parse(process.argv);
+
+	const options = program.opts();
+	const token = options.token;
+	const cities = options.cities;
+	const help = options.help;
+
+	return {
+		token,
+		cities,
+		help
+	};
 };
 
 export { getArgs };
+
